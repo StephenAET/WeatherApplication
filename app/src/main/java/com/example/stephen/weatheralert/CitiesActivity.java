@@ -1,7 +1,9 @@
 package com.example.stephen.weatheralert;
 
+
 import android.app.SearchManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,7 +21,7 @@ import java.util.List;
 public class CitiesActivity extends AppCompatActivity implements CitySearchFragment.CitySearchFragmentListener {
 
     SearchView searchView;
-    List<City> cities;
+    List<City> cities = new ArrayList<>(0);
     ProgressBar progressBar;
 
     CityListTask cityListTask;
@@ -115,16 +117,16 @@ public class CitiesActivity extends AppCompatActivity implements CitySearchFragm
 
     /**
      * Display a list of (filtered) Cities in the City Search List Fragment
+     *
      * @param cities
      */
     private void displaySearchResults(List<City> cities) {
 
         //Attempt to Find the City Search List Fragment in the Container
-        CitySearchFragment fragment = (CitySearchFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.cities_container);
-        if (fragment != null) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.cities_container);
+        if (fragment != null && fragment.getClass() == CitySearchFragment.class) {
             //Fragment already exists in container, so just update
-            fragment.changeCityList(cities);
+            ((CitySearchFragment) fragment).changeCityList(cities);
         } else {
 
             //Create, Present and Update the fragment
@@ -138,6 +140,7 @@ public class CitiesActivity extends AppCompatActivity implements CitySearchFragm
 
     /**
      * Inflate Locations Menu
+     *
      * @param menu
      * @return
      */
@@ -150,6 +153,7 @@ public class CitiesActivity extends AppCompatActivity implements CitySearchFragm
 
     /**
      * Handle Action Bar Item Click Events
+     *
      * @param item
      * @return
      */
@@ -180,13 +184,14 @@ public class CitiesActivity extends AppCompatActivity implements CitySearchFragm
     /**
      * Callback from City Search Fragment
      * When a City Search Result is Clicked in the City Search List Fragment
+     *
      * @param searchText
      */
     @Override
     public void onCitySearchResultClicked(String searchText) {
 
         Bundle bundle = new Bundle();
-        bundle.putString("city",searchText);
+        bundle.putString("city", searchText);
 
         CityDetailFragment fragment = new CityDetailFragment();
         fragment.setArguments(bundle);
@@ -198,6 +203,7 @@ public class CitiesActivity extends AppCompatActivity implements CitySearchFragm
 
     /**
      * Update the Progress Bar Value
+     *
      * @param progressPercent
      */
     public void setProgressPercent(Integer progressPercent) {
